@@ -46,7 +46,7 @@ class AlarmSwitch extends State<AlarmWidget> {
       ),
       child: Column(
         children: [
-          const SizedBox(height: 25.0),
+          const SizedBox(height: 30.0),
           Align(
             alignment: Alignment.topRight,
             child: Padding(
@@ -60,7 +60,7 @@ class AlarmSwitch extends State<AlarmWidget> {
               ),
             ),
           ),
-          const SizedBox(height: 35.0),
+          const SizedBox(height: 25.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
