@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'widgets/alarm_widget.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -31,31 +33,22 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(children: [
-          Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(50.0)),
-              color: Colors.red,
-            ),
-            height: 250,
-            width: MediaQuery.of(context).size.width,
-          ),
-          Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(50.0)),
-              color: Colors.yellow,
-            ),
-            height: 250,
-            width: MediaQuery.of(context).size.width,
-          ),
-          Container(
-            height: 250,
-            width: double.infinity,
-            color: Colors.blue,
-          ),
-        ]),
-      ),
+      body: Stack(
+        fit: StackFit.loose,
+        children: [
+        Positioned(
+          width: MediaQuery.of(context).size.width,
+          bottom: 350.0,
+          child: const AlarmWidget(color: Colors.red, time: '10:00', title: 'Wake up')),
+        Positioned(
+          width: MediaQuery.of(context).size.width,
+          bottom: 150.0,
+          child: const AlarmWidget(color: Colors.green, time: '12:00', title: 'Lunch')),
+        Positioned(
+          width: MediaQuery.of(context).size.width,
+          bottom: -50.0,
+          child: const AlarmWidget(color: Colors.blue, time: '18:00', title: 'Dinner')),
+      ]),
     );
   }
 }
