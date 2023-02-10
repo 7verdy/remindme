@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 
 
 // ignore: must_be_immutable
-class AlarmWidget extends StatefulWidget {
-  const AlarmWidget(
+class ReminderWidget extends StatefulWidget {
+  const ReminderWidget(
       {super.key,
       required this.color,
       required this.time,
@@ -15,10 +15,10 @@ class AlarmWidget extends StatefulWidget {
   final String title;
 
   @override
-  AlarmSwitch createState() => AlarmSwitch();
+  ReminderState createState() => ReminderState();
 }
 
-class AlarmSwitch extends State<AlarmWidget> {
+class ReminderState extends State<ReminderWidget> {
   bool isOn = true;
   late Color color;
   late String time;

@@ -9,7 +9,7 @@ class Reminder {
   final String? description;
   final DateTime date;
   final String time;
-  final int? id;
+  final int id;
   static List<Reminder> reminders = [];
 
   Reminder({required this.title, this.description, required this.date}) : id = const Uuid().v4().hashCode,
