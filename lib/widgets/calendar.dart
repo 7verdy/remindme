@@ -1,146 +1,113 @@
+import 'package:reminders/event.dart';
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _CalendarState createState() => _CalendarState();
 }
 
 class _CalendarState extends State<Calendar> {
-  Color accent = const Color.fromRGBO(26, 188, 156, 1);
-  DateTime selectedDate = DateTime.now();
+  late Map<DateTime, List<Event>> selectedEvents;
+  CalendarFormat format = CalendarFormat.month;
+  DateTime selectedDay = DateTime.now();
+  DateTime focusedDay = DateTime.now();
 
-  int currentDateSelectedIndex = 0;
-  ScrollController scrollController = ScrollController();
+  final TextEditingController _eventController = TextEditingController();
 
-  List<String> months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  ];
+  @override
+  void initState() {
+    selectedEvents = {};
+    super.initState();
+  }
 
-  List<String> days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  List<Event> _getEventsfromDay(DateTime date) {
+    return selectedEvents[date] ?? [];
+  }
+
+  @override
+  void dispose() {
+    _eventController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-                color: Colors.transparent,
-              ),
-          ),
-          Column(
-          children: [
-            const SizedBox(height: 10.0),
-            Container(
-                height: 30,
-                margin: const EdgeInsets.only(left: 10),
-                alignment: Alignment.centerLeft,
-                child: RichText(
-                  text: TextSpan(
-                    text: months[selectedDate.month - 1],
-                    style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                        color: Color.fromRGBO(1, 9, 32, 1)),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: ' ${selectedDate.year.toString()}',
-                          style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w400,
-                              color: Color.fromRGBO(1, 9, 32, 1))),
-                    ],
-                  ),
-                )),
-            const SizedBox(height: 10),
-            Expanded(
-              child: SingleChildScrollView(
-                child: SizedBox(
-                    height: 80,
-                    child: SizedBox(
-                        child: ListView.separated(
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const SizedBox(width: 10);
-                      },
-                      itemCount: 365,
-                      controller: scrollController,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext context, int index) {
-                        return InkWell(
-                          onTap: () {
-                            setState(() {
-                              currentDateSelectedIndex = index;
-                              selectedDate =
-                                  DateTime.now().add(Duration(days: index));
-                            });
-                          },
-                          child: Container(
-                            height: 80,
-                            width: 60,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: currentDateSelectedIndex == index
-                                    ? const Color.fromRGBO(1, 9, 32, 1)
-                                    : Colors.transparent),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  DateTime.now()
-                                      .add(Duration(days: index))
-                                      .day
-                                      .toString(),
-                                  style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                      color: currentDateSelectedIndex == index
-                                          ? accent
-                                          : const Color.fromRGBO(1, 9, 32, 1)),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  days[DateTime.now()
-                                              .add(Duration(days: index))
-                                              .weekday -
-                                          1]
-                                      .toString(),
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: currentDateSelectedIndex == index
-                                          ? accent
-                                          : const Color.fromRGBO(1, 9, 32, 1)),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ))),
-              ),
+    return Column(
+      children: [
+        TableCalendar(
+          focusedDay: selectedDay,
+          firstDay: DateTime(1990),
+          lastDay: DateTime(2050),
+          calendarFormat: format,
+          onFormatChanged: (CalendarFormat format) {
+            setState(() {
+              format = format;
+            });
+          },
+          startingDayOfWeek: StartingDayOfWeek.sunday,
+          daysOfWeekVisible: true,
+
+          //Day Changed
+          onDaySelected: (DateTime selectDay, DateTime focusDay) {
+            setState(() {
+              selectedDay = selectDay;
+              focusedDay = focusDay;
+            });
+            print(focusedDay);
+          },
+          selectedDayPredicate: (DateTime date) {
+            return isSameDay(selectedDay, date);
+          },
+
+          eventLoader: _getEventsfromDay,
+
+          //To style the Calendar
+          calendarStyle: CalendarStyle(
+            isTodayHighlighted: true,
+            selectedDecoration: BoxDecoration(
+              color: Colors.blue,
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(5.0),
             ),
-          ],
+            selectedTextStyle: const TextStyle(color: Colors.white),
+            todayDecoration: BoxDecoration(
+              color: Colors.purpleAccent,
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            defaultDecoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            weekendDecoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+          ),
+          headerStyle: HeaderStyle(
+            formatButtonVisible: true,
+            titleCentered: true,
+            formatButtonShowsNext: false,
+            formatButtonDecoration: BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            formatButtonTextStyle: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
         ),
-      ]),
-    ));
+        ..._getEventsfromDay(selectedDay).map(
+          (Event event) => ListTile(
+            title: Text(
+              event.title,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

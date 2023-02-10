@@ -41,67 +41,36 @@ class _MyHomePageState extends State<MyHomePage> {
         Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color.fromRGBO(26, 188, 156, 1),
-                Color.fromRGBO(1, 9, 32, 1),
-              ],
-            ),
-          ),
+          color: const Color.fromRGBO(60, 61, 83, 1),
         ),
-        Column(children: [
-          const SizedBox(height: 180.0, child: Calendar()),
-          const SizedBox(height: 30.0),
-          Expanded(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(1, 9, 32, 1),
-                // border top left and top right
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50.0),
-                  topRight: Radius.circular(50.0),
-                ),
-              ),
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
-                  child: Text(
-                    'Today',
-                    style: GoogleFonts.getFont('Yeseva One',
-                        textStyle: const TextStyle(
-                          color: Color.fromRGBO(26, 188, 156, 1),
-                          fontSize: 30.0,
-                        )),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ]),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(children: const [
+            SizedBox(height: 50.0),
+            Calendar(),
+            SizedBox(height: 30.0),
+          ]),
+        ),
         Positioned(
-          bottom: 5.0,
-          right: 5.0,
-          child: CircleAvatar(
-            radius: 30.0,
-            backgroundColor: const Color.fromRGBO(26, 188, 156, 1),
-            child: IconButton(
-              icon: const Icon(Icons.add),
-              color: const Color.fromRGBO(1, 9, 32, 1),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddReminderPage(),
-                  ),
-                );
-              },
-            ),
-          ),
+          bottom: 10.0,
+          right: 10.0,
+          height: 40.0,
+          width: 40.0,
+          child: AspectRatio(
+              aspectRatio: 1.0,
+              child: FloatingActionButton(
+                backgroundColor: const Color.fromRGBO(104, 104, 142, 1),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddReminderPage()),
+                  );
+                },
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                child: const Icon(Icons.add, size: 25.0),
+              )),
         ),
       ]),
     );

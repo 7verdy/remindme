@@ -34,6 +34,9 @@ dependencies:
   google_fonts: ^4.0.3
   uuid: ^3.0.6
   path_provider: ^2.0.12
+  table_calendar: ^3.0.9
+
+
 
 
   cupertino_icons: ^1.0.2
